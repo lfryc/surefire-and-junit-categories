@@ -1,0 +1,16 @@
+target
+test-output
+.classpath
+.settings
+.project
+.clover
+.externalToolBuilders
+MANIFEST.MF
+rebel.xml
+*faces-config.xml.jsfdia
+
+.factorypath
+
+# Selenium 
+log.txt
+chromedriver.log
