@@ -116,6 +116,18 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>browser-firefox</id>
+            <properties>
+                <browserExcluded>category.NoFirefox</browserExcluded>
+            </properties>
+        </profile>
+        <profile>
+            <id>container-tomcat</id>
+            <properties>
+                <browserExcluded>category.NoTomcat</browserExcluded>
+            </properties>
+        </profile>
     </profiles>
 
 </project>

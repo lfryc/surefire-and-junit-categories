@@ -4,16 +4,18 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import category.Failing;
+import category.Smoke;
 
-public class MyUnitTest {
+@Category(Smoke.class)
+public class MySmokeTest {
 
     @Test
-    public void test() {
-        System.out.println("test");
+    public void smokeTest() {
+        System.out.println("smokeTest");
     }
 
-    @Test
     @Category(Failing.class)
+    @Test
     public void failingTest() {
         System.out.println("failingTest");
     }

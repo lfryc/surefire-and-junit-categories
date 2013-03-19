@@ -9,20 +9,19 @@ import category.Smoke;
 
 public class MyIntegrationTest {
 
-
-    @Category(Integration.class)
     @Test
+    @Category(Integration.class)
     public void integrationTest() {
         System.out.println("integrationTest");
     }
 
-    @Category(Smoke.class)
     @Test
+    @Category(Smoke.class)
     public void smokeTest() {
         System.out.println("smokeTest");
     }
 
-    @Category({Integration.class,Failing.class})
+    @Category({ Integration.class, Failing.class })
     @Test
     public void failingTest() {
         System.out.println("failingTest");
