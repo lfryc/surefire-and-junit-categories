@@ -11,11 +11,11 @@ Advanced profiles
 
 We have also setup few profiles:
 
-* `integration-tests` run all integration tests including smoke tests
+Profile `integration-tests` run all integration tests including smoke tests
 
     mvn verify -Pintegration-tests
 
 
-* `browser-firefox` will exclude tests which are not support on Firefox
+Profile `browser-firefox` will exclude tests which are not support on Firefox
 
-   mvn verify -Pintegration-tests -Pbrowser-firefox
+    mvn verify -Pintegration-tests -Pbrowser-firefox
