@@ -5,6 +5,8 @@ import org.junit.experimental.categories.Category;
 
 import category.Failing;
 import category.Integration;
+import category.NotFirefox;
+import category.NotTomcat;
 import category.Smoke;
 
 public class MyIntegrationTest {
@@ -25,5 +27,17 @@ public class MyIntegrationTest {
     @Test
     public void failingTest() {
         System.out.println("failingTest");
+    }
+
+    @Category({Integration.class, NotTomcat.class})
+    @Test
+    public void notSupportedOnTomcat() {
+        System.out.println("notSupportedOnTomcat");
+    }
+
+    @Category({Integration.class, NotFirefox.class})
+    @Test
+    public void notSupportedOnFirefox() {
+        System.out.println("notSupportedOnFirefox");
     }
 }
