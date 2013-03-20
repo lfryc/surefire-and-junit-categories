@@ -14,12 +14,6 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
-        <failingIncluded></failingIncluded>
-        <failingExcluded>category.Failing</failingExcluded>
-        <containerExcluded></containerExcluded>
-        <browserExcluded></browserExcluded>
-        <targetIncluded></targetIncluded>
-        <targetExcluded>${containerExcluded} ${browserExcluded}</targetExcluded>
     </properties>
 
     <dependencies>
@@ -47,8 +41,6 @@
                             <excludes>
                                 <exclude>**/integration/**</exclude>
                             </excludes>
-                            <groups>${failingIncluded} ${targetIncluded}</groups>
-                            <excludedGroups>${failingExcluded} ${targetExcluded}</excludedGroups>
                         </configuration>
                     </execution>
                 </executions>
@@ -64,6 +56,15 @@
                     <name>integration</name>
                 </property>
             </activation>
+            <properties>
+                <testCategory.included.default>NOT category.None</testCategory.included.default>
+                <testCategory.excluded.default>category.Failing</testCategory.excluded.default>
+                <testCategory.excluded.container></testCategory.excluded.container>
+                <testCategory.excluded.browser></testCategory.excluded.browser>
+                <testCategory.excluded.jsf></testCategory.excluded.jsf>
+                <groups>${testCategory.included.default} ${testCategory.excluded.browser} ${testCategory.excluded.container} ${testCategory.excluded.jsf}</groups>
+                <excludedGroups>${testCategory.excluded.default}</excludedGroups>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
@@ -98,8 +99,26 @@
                                     <includes>
                                         <include>**/integration/**</include>
                                     </includes>
-                                    <groups>${failingIncluded} ${targetIncluded}</groups>
-                                    <excludedGroups>${failingExcluded} ${targetExcluded}</excludedGroups>
+                                    <groups>${groups}</groups>
+                                    <excludedGroups>${excludedGroups}</excludedGroups>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>print-categories</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <echo>groups: ${groups}</echo>
+                                        <echo>excludedGroups: ${excludedGroups}</echo>
+                                    </target>
                                 </configuration>
                             </execution>
                         </executions>
@@ -115,8 +134,7 @@
                 </property>
             </activation>
             <properties>
-                <failingIncluded>category.Smoke</failingIncluded>
-                <failingExcluded>category.Failing</failingExcluded>
+                <testCategory.included.default>category.Smoke</testCategory.included.default>
             </properties>
         </profile>
         <profile>
@@ -127,8 +145,21 @@
                 </property>
             </activation>
             <properties>
-                <failingIncluded>category.Failing</failingIncluded>
-                <failingExcluded></failingExcluded>
+                <testCategory.included.default>category.Failing</testCategory.included.default>
+                <testCategory.excluded.default>category.None</testCategory.excluded.default>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>container-tomcat</id>
+            <activation>
+                <property>
+                    <name>integration</name>
+                    <value>tomcat6</value>
+                </property>
+            </activation>
+            <properties>
+                <testCategory.excluded.container>AND NOT category.JavaEEOnly</testCategory.excluded.container>
             </properties>
         </profile>
 
@@ -141,20 +172,20 @@
                 </property>
             </activation>
             <properties>
-                <browserExcluded>category.NoPhantomJS</browserExcluded>
+                <testCategory.excluded.browser>AND NOT category.NoPhantomJS</testCategory.excluded.browser>
             </properties>
         </profile>
 
         <profile>
-            <id>browser-tomcat</id>
+            <id>myfaces</id>
             <activation>
                 <property>
-                    <name>integration</name>
-                    <value>tomcat6</value>
+                    <name>jsf_profile</name>
+                    <value>myfaces</value>
                 </property>
             </activation>
             <properties>
-                <containerExcluded>category.JavaEEOnly</containerExcluded>
+                <testCategory.excluded.jsf>AND NOT category.FailingOnMyFaces</testCategory.excluded.jsf>
             </properties>
         </profile>
     </profiles>

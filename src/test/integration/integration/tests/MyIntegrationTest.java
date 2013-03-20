@@ -6,6 +6,7 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 import category.Failing;
+import category.FailingOnMyFaces;
 import category.JavaEEOnly;
 import category.NoPhantomJS;
 import category.Smoke;
@@ -28,6 +29,12 @@ public class MyIntegrationTest {
     @Test
     public void failingTest() {
         System.out.println("failingTest");
+    }
+
+    @Category(FailingOnMyFaces.class )
+    @Test
+    public void failingOnMyFaces() {
+        System.out.println("failingOnMyFaces");
     }
 
     @Category(JavaEEOnly.class)
