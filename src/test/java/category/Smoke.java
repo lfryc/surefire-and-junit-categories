@@ -1,5 +1,5 @@
 package category;
 
-public interface Smoke extends Integration {
+public interface Smoke {
 
 }

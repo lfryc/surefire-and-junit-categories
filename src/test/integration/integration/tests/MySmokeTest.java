@@ -1,41 +1,37 @@
-package tests;
+package integration.tests;
 
+import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.runner.RunWith;
 
 import category.Failing;
-import category.Integration;
-import category.NotFirefox;
-import category.NotTomcat;
+import category.JavaEEOnly;
+import category.NoPhantomJS;
 import category.Smoke;
 
-public class MyIntegrationTest {
+@Category(Smoke.class)
+@RunWith(Arquillian.class)
+public class MySmokeTest {
 
     @Test
-    @Category(Integration.class)
-    public void integrationTest() {
-        System.out.println("integrationTest");
-    }
-
-    @Test
-    @Category(Smoke.class)
     public void smokeTest() {
         System.out.println("smokeTest");
     }
 
-    @Category({ Integration.class, Failing.class })
+    @Category(Failing.class)
     @Test
     public void failingTest() {
         System.out.println("failingTest");
     }
 
-    @Category({Integration.class, NotTomcat.class})
+    @Category(JavaEEOnly.class)
     @Test
     public void notSupportedOnTomcat() {
         System.out.println("notSupportedOnTomcat");
     }
 
-    @Category({Integration.class, NotFirefox.class})
+    @Category(NoPhantomJS.class)
     @Test
     public void notSupportedOnFirefox() {
         System.out.println("notSupportedOnFirefox");

@@ -14,6 +14,8 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
+        <failingIncluded></failingIncluded>
+        <failingExcluded>category.Failing</failingExcluded>
         <browserExcluded></browserExcluded>
         <containerExcluded></containerExcluded>
     </properties>
@@ -23,6 +25,11 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.10</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <version>1.0.3.Final</version>
         </dependency>
     </dependencies>
 
@@ -34,19 +41,11 @@
                     <execution>
                         <id>default-test</id>
                         <configuration>
-                            <groups></groups>
-                            <excludedGroups>category.Integration,category.Failing</excludedGroups>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>smoke-test</id>
-                        <phase>integration-test</phase>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                        <configuration>
-                            <groups>category.Integration</groups>
-                            <excludedGroups>!category.Smoke,category.Failing,${browserExcluded},${containerExcluded}</excludedGroups>
+                            <excludes>
+                                <exclude>**/integration/**</exclude>
+                            </excludes>
+                            <groups>${failingIncluded}</groups>
+                            <excludedGroups>${failingExcluded}</excludedGroups>
                         </configuration>
                     </execution>
                 </executions>
@@ -57,19 +56,34 @@
     <profiles>
         <profile>
             <id>integration-tests</id>
+            <activation>
+                <property>
+                    <name>integration</name>
+                </property>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>default-test</id>
-                                <phase>none</phase>
+                                <id>add-integration-test-sources</id>
+                                <phase>process-test-sources</phase>
+                                <goals>
+                                    <goal>add-test-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/test/integration</source>
+                                    </sources>
+                                </configuration>
                             </execution>
-                            <execution>
-                                <id>smoke-test</id>
-                                <phase>none</phase>
-                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <executions>
                             <execution>
                                 <id>integration-test</id>
                                 <phase>integration-test</phase>
@@ -77,8 +91,11 @@
                                     <goal>test</goal>
                                 </goals>
                                 <configuration>
-                                    <groups>category.Integration</groups>
-                                    <excludedGroups>category.Failing,${browserExcluded},${containerExcluded}</excludedGroups>
+                                    <includes>
+                                        <include>**/integration/**</include>
+                                    </includes>
+                                    <groups>${failingIncluded}</groups>
+                                    <excludedGroups>${failingExcluded}</excludedGroups>
                                 </configuration>
                             </execution>
                         </executions>
@@ -88,44 +105,14 @@
         </profile>
         <profile>
             <id>failing-tests</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>default-test</id>
-                                <phase>none</phase>
-                            </execution>
-                            <execution>
-                                <id>smoke-test</id>
-                                <phase>none</phase>
-                            </execution>
-                            <execution>
-                                <id>failing-test</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>test</goal>
-                                </goals>
-                                <configuration>
-                                    <groups>category.Failing</groups>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>browser-firefox</id>
+            <activation>
+                <property>
+                    <name>failing</name>
+                </property>
+            </activation>
             <properties>
-                <browserExcluded>category.NotFirefox</browserExcluded>
-            </properties>
-        </profile>
-        <profile>
-            <id>container-tomcat</id>
-            <properties>
-                <containerExcluded>category.NotTomcat</containerExcluded>
+                <failingIncluded>category.Failing</failingIncluded>
+                <failingExcluded></failingExcluded>
             </properties>
         </profile>
     </profiles>
