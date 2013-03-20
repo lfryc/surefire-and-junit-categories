@@ -27,13 +27,13 @@ public class MySmokeTest {
 
     @Category(JavaEEOnly.class)
     @Test
-    public void notSupportedOnTomcat() {
-        System.out.println("notSupportedOnTomcat");
+    public void javaEEOnly() {
+        System.out.println("javaEEOnly");
     }
 
     @Category(NoPhantomJS.class)
     @Test
-    public void notSupportedOnFirefox() {
-        System.out.println("notSupportedOnFirefox");
+    public void notSupportedOnPhantom() {
+        System.out.println("notSupportedOnPhantom");
     }
 }
